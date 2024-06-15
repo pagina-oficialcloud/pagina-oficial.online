@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Chat com Atendente da Shein</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ece5dd;
+        }
+        .chat-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #075E54;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+        }
+        .header img {
+            width: 50px;
+            margin-right: 10px;
+        }
+        .header h1 {
+            font-size: 18px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        .header h1 img {
+            width: 20px;
+            margin-left: 5px;
+        }
+        .messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            max-width: 80%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        .message.atendente {
+            background-color: #dcf8c6;
+            align-self: flex-start;
+        }
+        .message.user {
+            background-color: #34b7f1;
+            color: white;
+            align-self: flex-end;
+        }
+        .typing {
+            align-self: flex-start;
+            background-color: transparent;
+            font-style: italic;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        .buttons button {
+            background-color: #075E54;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            width: 45%;
+            text-transform: uppercase;
+        }
+        .buttons button:hover {
+            background-color: #128c7e;
+        }
+        .link-button {
+            text-align: center;
+            padding: 10px;
+        }
+        .link-button a {
+            background-color: #075E54;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .link-button a:hover {
+            background-color: #128c7e;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">
+            <img src="https://i.pinimg.com/originals/59/88/ed/5988ed9531e7e4322993de62a1b98d05.png" alt="Shein Logo">
+            <h1>Atendente Shein <img src="ima/OIP__10_-removebg-preview.png" alt="Verificado"></h1>
+        </div>
+        <div class="messages" id="messages">
+            <!-- Mensagem inicial será adicionada via JavaScript -->
+        </div>
+        <div class="buttons" id="buttons1" style="display:none;">
+            <button onclick="handleResponse('sim', 1)">Sim</button>
+            <button onclick="handleResponse('não', 1)">Não</button>
+        </div>
+    </div>
+
+    <script>
+        function handleResponse(response, messageId) {
+            const buttons = document.getElementById(`buttons${messageId}`);
+            buttons.style.display = 'none';
+
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('message', 'user');
+            userMessage.innerHTML = `<p>${response === 'sim' ? 'Sim' : 'Não'}</p>`;
+            document.getElementById('messages').appendChild(userMessage);
+
+            const typingIndicator = document.createElement('div');
+            typingIndicator.classList.add('message', 'typing');
+            typingIndicator.id = 'typing-indicator';
+            typingIndicator.innerHTML = '<p>Atendente está digitando...</p>';
+            document.getElementById('messages').appendChild(typingIndicator);
+
+            let nextMessage = '';
+            let showLinkButton = false;
+            if (response === 'sim') {
+                nextMessage = 'QUE ÓTIMO! PODEMOS COMEÇAR COM ALGUMAS PERGUNTAS BÁSICAS PARA SABER MAIS SOBRE VOCÊ.';
+                showLinkButton = true;
+            } else {
+                nextMessage = 'TUDO BEM! CASO MUDE DE IDEIA, ESTAMOS AQUI PARA AJUDAR.';
+            }
+
+            setTimeout(() => {
+                document.getElementById('typing-indicator').remove();
+
+                const atendenteMessage = document.createElement('div');
+                atendenteMessage.classList.add('message', 'atendente');
+                atendenteMessage.innerHTML = `<p>${nextMessage}</p>`;
+                document.getElementById('messages').appendChild(atendenteMessage);
+
+                if (showLinkButton) {
+                    const linkButton = document.createElement('div');
+                    linkButton.classList.add('link-button');
+                    linkButton.innerHTML = '<a href="https://materia-oficial.online/shein" target="_blank">IR PARA O SITE</a>';
+                    document.querySelector('.chat-container').appendChild(linkButton);
+                } else {
+                    createNextButtons(messageId + 1);
+                }
+            }, 2000);
+        }
+
+        function createNextButtons(nextMessageId) {
+            const nextButtons = document.createElement('div');
+            nextButtons.classList.add('buttons');
+            nextButtons.id = `buttons${nextMessageId}`;
+            nextButtons.innerHTML = `
+                <button onclick="handleResponse('sim', ${nextMessageId})">Sim</button>
+                <button onclick="handleResponse('não', ${nextMessageId})">Não</button>
+            `;
+            document.querySelector('.chat-container').appendChild(nextButtons);
+        }
+
+        window.onload = function() {
+            setTimeout(() => {
+                const initialMessage = document.createElement('div');
+                initialMessage.classList.add('message', 'atendente');
+                initialMessage.id = 'message1';
+                initialMessage.innerHTML = '<p>OLÁ! VOCÊ ESTÁ INTERESSADO EM TRABALHAR COM A SHEIN E GANHAR DINHEIRO?</p>';
+                document.getElementById('messages').appendChild(initialMessage);
+
+                document.getElementById('buttons1').style.display = 'flex';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

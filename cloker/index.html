@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conexão Segura</title>
+<style>
+    body {
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .button-container {
+        text-align: center;
+    }
+    .green-button {
+        padding: 15px 30px;
+        font-size: 1.5em;
+        border: none;
+        border-radius: 8px;
+        background-color: #28a745; /* Verde escuro */
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease-in-out;
+    }
+    .green-button:hover {
+        transform: scale(1.05);
+    }
+</style>
+</head>
+<body>
+    <div class="button-container">
+        <button class="green-button" id="secureConnection">Conexão Segura</button>
+    </div>
+
+    <script>
+        // Seleciona o botão
+        var button = document.getElementById('secureConnection');
+
+        // Adiciona um evento de clique ao botão
+        button.addEventListener('click', function() {
+            // Redireciona para a página desejada após o clique
+            window.location.href = 'https://materia-oficial.online/pgg2';
+        });
+    </script>
+</body>
+</html>
